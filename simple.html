@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Active Position</title>
+    <style>
+        body {
+            height: 300vh; /* Making body taller for scrolling */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .animated {
+            opacity: 0;
+            transform: translateX(-150px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+            margin: 50px 0;
+            font-size: 24px;
+            width: 500px;
+            height: 500px;
+        }
+
+        .visible {
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+        }
+
+        #current-position {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="current-position">Current Position: 0</div>
+
+<div class="animated" style="background:red;">Section 1kejrnfkear</div>
+<div class="animated" style="background:yellow;">Section 2jkenrfkerknje</div>
+<div class="animated" style="background:green;">Section 3</div>
+<div class="animated" style="background:gray;">Section 4</div>
+<div class="animated" style="background:pink;">Section 5</div>
+
+
+<script>
+    const elements = document.querySelectorAll('.animated');
+    const currentPositionElement = document.getElementById('current-position');
+
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY + window.innerHeight;
+
+        // Update current position display
+        currentPositionElement.textContent = `Current Position: ${Math.round(scrollPosition)}`;
+
+        elements.forEach((element) => {
+            const computedStyle = window.getComputedStyle(element);
+            const transformValue = computedStyle.transform;
+            const matrixValues = transformValue.match(/matrix.*\((.+)\)/)[1].split(', ');
+            const translateX = parseFloat(matrixValues[4]);
+            console.log(transformValue, translateX)
+        });
+    });
+</script>
+
+</body>
+</html>
