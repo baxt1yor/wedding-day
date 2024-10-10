@@ -77,8 +77,8 @@ function handleScroll() {
             animations[i].style.opacity = 1;
             animations[i].style.transform = 'translateX(0)';
         } else {
-            // animations[i].style.opacity = 0;
-            // animations[i].style.transform = `translateX(${animationMinus[i]*50}px)`;
+            animations[i].style.opacity = 0;
+            animations[i].style.transform = `translateX(${animationMinus[i]*50}px)`;
         }
     }
 
