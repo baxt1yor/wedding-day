@@ -1,6 +1,7 @@
+import '../css/styles.css';
+
 const audio = document.getElementById('audio');
 const muteBtn =  document.getElementById("mute");
-const sections = document.getElementsByTagName("section");
 
 const day = document.getElementById("day");
 const hour = document.getElementById("hour");
@@ -11,8 +12,6 @@ const guest = document.querySelector("input[name=guest]");
 const attendance = document.querySelector("input[name=attendance]");
 const previousDate = new Date('2025-04-12T00:00:00');
 const guestValid = document.getElementById("guest-valid");
-
-const animatedBoxes = document.querySelectorAll('.animated-box');
 
 const attendanceValid = document.getElementById("attendance-valid");
 
@@ -109,6 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+
 const handleIntersection = (entries, observer) => {
     for (const entry of entries) {
         entry.target.style.setProperty('--shown', entry.isIntersecting ? 1 : 0)
@@ -125,6 +125,7 @@ const observer = new IntersectionObserver((entries, observer) => {
     threshold: 0.5
 })
 
+muteBtn.addEventListener('click', toggleMute)
 
 animations.forEach(animation => observer.observe(animation))
 
