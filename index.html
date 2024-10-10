@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="/src/css/styles.css">
 </head>
 <body>
-<!--<div class="spinner-overlay" id="spinner">-->
-<!--    <img src="/src/static/images/rings.png" alt="Loading..." class="spinner"> &lt;!&ndash; Replace with your spinner image &ndash;&gt;-->
-<!--</div>-->
+<div class="spinner-overlay" id="spinner">
+    <img src="/src/static/images/rings.png" alt="Loading..."> <!-- Replace with your spinner image -->
+</div>
 <header>
     <div class="flex justify-end p-4 mx-auto w-full max-w-[400px]">
         <button class="rounded-full" onclick="toggleMute()" id="mute">
@@ -29,19 +29,19 @@
     <section>
         <div class="m-auto w-full max-w-[400px] py-10 max-sm:py-0 px-16">
             <div class="flex gap-5 justify-center">
-                <div class="mt-5" style="opacity: 0; transform: translateX(-50px);">
+                <div class="mt-5" style="opacity: 0; transform: translateX(-50px);  transition: all .5s">
                     <p class="text-[45px] leading-10 font-[Jony] font-semibold">12</p>
                     <p class="text-[45px] leading-10 font-[Jony] font-semibold">04</p>
                     <p class="text-[45px] leading-10 font-[Jony] font-semibold">25</p>
                 </div>
-                <div class="max-w-[250px] w-full min-h-[300px]" style="opacity: 0; transform: translateX(50px);">
+                <div class="max-w-[250px] w-full min-h-[300px]" style="opacity: 0; transform: translateX(50px);  aspect-ratio: 1;  transition: all .5s">
                     <img alt="photo" src="/src/static/images/img_1.png" fetchpriority="high" width="1000" height="1000"
                          decoding="async" data-nimg="1" class="min-h-[300px] w-full object-cover"
                          style="color: transparent;">
                 </div>
             </div>
             <div class="mt-5 pl-9 relative">
-                <div class="w-[1px] h-72 absolute left-5 -bottom-8 bg-black" style="opacity: 0; transform: translateX(-50px);"></div>
+                <div class="w-[1px] h-72 absolute left-5 -bottom-8 bg-black" style="opacity: 0; transform: translateX(-50px);  aspect-ratio: 1"></div>
                 <div style="opacity: 0; transform: translateX(50px);">
                     <h1 class="text-[48px] leading-10">Bakhtiyor</h1>
                     <h2 class="text-7xl font-[champignon] font-normal leading-[0.8] ">and</h2>

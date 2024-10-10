@@ -64,19 +64,21 @@ function handleScroll() {
         const transformValue = computedStyle.transform;
         const matrixValues = transformValue.match(/matrix.*\((.+)\)/)[1].split(', ');
         const translateX = parseFloat(matrixValues[4]);
+        const translateY = parseFloat(matrixValues[5] ?? 0);
         const distanceToView = scrollPosition - (animations[i].getBoundingClientRect().top + window.scrollY);
         if (distanceToView > 0 && distanceToView < window.innerHeight) {
+            console.log(animations[i].style.transform)
             const opacity = Math.min(1, distanceToView / window.innerHeight);
             const translate = translateX < 0 ? Math.min(0, translateX + distanceToView) : Math.max(0, translateX - distanceToView);
 
             animations[i].style.opacity = opacity;
-            animations[i].style.transform = `translateX(${translate}px)`;
+            animations[i].style.transform = `translateX(${translate}px) translateY(${translateY}px)`;
         } else if (distanceToView >= window.innerHeight) {
             animations[i].style.opacity = 1;
             animations[i].style.transform = 'translateX(0)';
         } else {
-            animations[i].style.opacity = 0;
-            animations[i].style.transform = `translateX(${animationMinus[i]*50}px)`;
+            // animations[i].style.opacity = 0;
+            // animations[i].style.transform = `translateX(${animationMinus[i]*50}px)`;
         }
     }
 
@@ -101,11 +103,30 @@ document.addEventListener("DOMContentLoaded", () => {
         requestAnimationFrame(handleScroll)
     });
 
+    setTimeout(() => {
+        document.getElementById('spinner').remove()
+    }, 1000)
 });
 
-document.addEventListener("visibilitychange", () => {
-    handleScroll()
+
+const handleIntersection = (entries, observer) => {
+    for (const entry of entries) {
+        entry.target.style.setProperty('--shown', entry.isIntersecting ? 1 : 0)
+    }
+}
+
+const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+        // console.log(entry.target);
+    })
+}, {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.5
 })
+
+
+animations.forEach(animation => observer.observe(animation))
 
 sendBtn.addEventListener("click", (event) => {
     event.preventDefault();

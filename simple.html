@@ -4,71 +4,196 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scroll Active Position</title>
+    <link rel="stylesheet" href="https://unpkg.com/open-props/open-props.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/open-props/normalize.min.css">
+    <link rel="stylesheet" href="https://rodydavis.github.io/material-design-lite/css/mdl.css">
     <style>
+        *,
+        *:after,
+        *:before {
+            box-sizing: border-box;
+        }
+
         body {
-            height: 300vh; /* Making body taller for scrolling */
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
+            justify-content:center;
+            flex-wrap: wrap;
+            gap: var(--size-4);
+            place-items: center;
+            min-height: 100vh;
+            background: var(--surface-2);
+            font-family: 'Google Sans', sans-serif, system-ui;
         }
 
-        .animated {
-            opacity: 0;
-            transform: translateX(-150px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-            margin: 50px 0;
-            font-size: 24px;
-            width: 500px;
-            height: 500px;
+        ul {
+            border-radius: var(--md-sys-shape-medium);
+            width: 100%;
+            aspect-ratio: 4 / 6;
+            background: var(--gray-0);
+            display: grid;
+            padding: 0;
+            margin: 0;
+            padding: var(--size-4);
+            gap: var(--size-4);
+            grid-template-columns: repeat(4, 1fr);
+            overflow: auto;
+            list-style-type: none;
+            transition: all 0.5s var(--ease-elastic-2);
         }
 
-        .visible {
-            opacity: 1 !important;
-            transform: translateX(0) !important;
+        .card.elevated {
+            padding: 0;
+            margin: 0;
+            background-color: var(--blue-2);
+            min-width: 0;
+            transition: all 0.5s var(--ease-elastic-2);
         }
 
-        #current-position {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            font-size: 24px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            border-radius: 5px;
+        .card .actions {
+            display: grid;
+            flex-direction: column;
+            grid-template-columns: auto auto;
+            gap: var(--size-2) var(--size-4);
+        }
+
+        .controls.card.elevated {
+            background-color: var(--md-sys-color-surface);
+        }
+
+        .grid .card {
+            aspect-ratio: 1;
+            transform: scale(calc(0.25 + (var(--shown, 1) * 0.75)));
+        }
+
+        .zipper .card {
+            --distance: 250%;
+            aspect-ratio: 1;
+            transform: translateX(250%) scale(.85);
+            /*transform: translateX(calc((var(--distance) * -1) + (var(--shown, 1) * var(--distance)))) scale(calc(0.25 + (var(--shown, 1) * 0.75)));*/
+        }
+
+        .zipper li:is(:nth-of-type(4n),:nth-of-type(4n + 3):nth-child(n)) .card {
+            --distance: -250%;
+            /*transition: all 0.5s var(--ease-elastic-1);*/
+        }
+
+        .rotater .card {
+            aspect-ratio: 1;
+            transform: rotate(calc(
+                    ((var(--rotation, 0) * -1) + (var(--shown, 1) * var(--rotation, 0))) * 1deg
+            )) scale(calc(0.25 + (var(--shown, 1) * 0.75)));
+        }
+
+        .rotater li:nth-of-type(n) .card {
+            --rotation: -270;
+            /*background: red;*/
+        }
+
+        .rotater li:nth-of-type(2n) .card {
+            --rotation: -180;
+            /*background: green;*/
+        }
+        .rotater li:nth-of-type(4n + 3):nth-child(n) .card {
+            --rotation: 180;
+            /*background: orange;*/
+        }
+        .rotater li:nth-of-type(n):nth-child(4n) .card {
+            --rotation: 270;
+            /*background: purple;*/
+        }
+
+        li {
+            padding: 0;
+        }
+
+        .list li {
+            min-height: 40px;
+            height: 8vmin;
+            grid-column: 1 / -1;
+        }
+
+        .list .card {
+            height: 100%;
+            transform: scaleX(calc(0.25 + (var(--shown, 1) * 0.75)));
+        }
+
+        .horizontal {
+            width: 75vmin;
+            aspect-ratio: 4 / 2;
+            display: flex;
+        }
+
+        .horizontal li {
+            min-width: 25%;
+            grid-template-columns: repeat(auto-fit, 1fr);
+        }
+
+        .horizontal .card {
+            height: 100%;
+            transform: scaleY(calc(0.25 + (var(--shown, 1) * 0.75)));
         }
     </style>
 </head>
 <body>
 
-<div id="current-position">Current Position: 0</div>
-
-<div class="animated" style="background:red;">Section 1kejrnfkear</div>
-<div class="animated" style="background:yellow;">Section 2jkenrfkerknje</div>
-<div class="animated" style="background:green;">Section 3</div>
-<div class="animated" style="background:gray;">Section 4</div>
-<div class="animated" style="background:pink;">Section 5</div>
+<ul class="zipper">
+</ul>
+<div class="controls card elevated filled">
+    <div class="actions">
+        <label for="grid">Grid</label>
+        <input checked type="radio" name="style" value="grid" id="grid">
+        <label for="list">List</label>
+        <input type="radio" name="style" value="list" id="list">
+        <label for="horizontal">Horizontal</label>
+        <input type="radio" name="style" value="horizontal" id="horizontal">
+        <label for="zipper">Zipper</label>
+        <input type="radio" name="style" value="zipper" id="zipper">
+        <label for="rotater">Rotater</label>
+        <input type="radio" name="style" value="rotater" id="rotater">
+    </div>
+</div>
 
 
 <script>
-    const elements = document.querySelectorAll('.animated');
-    const currentPositionElement = document.getElementById('current-position');
+    const LIST = document.querySelector('ul')
+    const CONTROLS = document.querySelector('.controls')
+    const COUNT = 256
 
-    window.addEventListener('scroll', () => {
-        const scrollPosition = window.scrollY + window.innerHeight;
 
-        // Update current position display
-        currentPositionElement.textContent = `Current Position: ${Math.round(scrollPosition)}`;
+    CONTROLS.addEventListener('change', e => {
+        LIST.className = e.target.value
+    })
 
-        elements.forEach((element) => {
-            const computedStyle = window.getComputedStyle(element);
-            const transformValue = computedStyle.transform;
-            const matrixValues = transformValue.match(/matrix.*\((.+)\)/)[1].split(', ');
-            const translateX = parseFloat(matrixValues[4]);
-            console.log(transformValue, translateX)
-        });
-    });
+    const createTile = () => {
+        const ITEM = document.createElement('li')
+        const CARD = document.createElement('div')
+        CARD.className = 'card elevated'
+        ITEM.appendChild(CARD)
+        LIST.appendChild(ITEM)
+    }
+
+    for (let t = 0; t < COUNT; t++) {
+        createTile()
+    }
+
+    const TILES = document.querySelectorAll('li')
+
+    let OPTIONS = {
+        root: LIST,
+        rootMargin: '0px',
+        threshold: 0
+    }
+
+    const handleIntersection = (entries, observer) => {
+        for (const entry of entries) {
+            entry.target.style.setProperty('--shown', entry.isIntersecting ? 1 : 0)
+        }
+    }
+
+    const observer = new IntersectionObserver(handleIntersection, OPTIONS)
+
+    TILES.forEach(TILE => observer.observe(TILE))
 </script>
 
 </body>
