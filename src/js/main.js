@@ -151,10 +151,7 @@ sendBtn.addEventListener("click", async (event) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                message: `
-                GuestName: ${guest.value}
-                Attendance: ${attendance.value}
-                `
+                message: `*GuestName*: ${guest.value} \n *Attendance*: ${attendance.value}`
             }),
         });
         const data = await response.json();

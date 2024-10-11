@@ -26,6 +26,7 @@ exports.handler = async (event) => {
             params: {
                 chat_id: chatId,
                 text: message,
+                parse_mode: "Markdown"
             },
         });
         return {
