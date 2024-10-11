@@ -1,5 +1,6 @@
 // netlify/functions/sendMessage.js
 const axios = require('axios');
+const process = require('node:process');
 
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
