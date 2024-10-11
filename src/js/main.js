@@ -66,7 +66,7 @@ function handleScroll() {
         const translateY = parseFloat(matrixValues[5] ?? 0);
         const distanceToView = scrollPosition - (animations[i].getBoundingClientRect().top + window.scrollY);
         if (distanceToView > 0 && distanceToView < window.innerHeight) {
-            console.log(animations[i].style.transform)
+            // console.log(animations[i].style.transform)
             const opacity = Math.min(1, distanceToView / window.innerHeight);
             const translate = translateX < 0 ? Math.min(0, translateX + distanceToView) : Math.max(0, translateX - distanceToView);
 
@@ -109,25 +109,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-const handleIntersection = (entries, observer) => {
-    for (const entry of entries) {
-        entry.target.style.setProperty('--shown', entry.isIntersecting ? 1 : 0)
-    }
-}
-
-const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-        // console.log(entry.target);
-    })
-}, {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.5
-})
+// const handleIntersection = (entries, observer) => {
+//     for (const entry of entries) {
+//         entry.target.style.setProperty('--shown', entry.isIntersecting ? 1 : 0)
+//     }
+// }
+//
+// const observer = new IntersectionObserver((entries, observer) => {
+//     entries.forEach((entry) => {
+//         // console.log(entry.target);
+//     })
+// }, {
+//     root: null,
+//     rootMargin: '0px',
+//     threshold: 0.5
+// })
 
 muteBtn.addEventListener('click', toggleMute)
 
-animations.forEach(animation => observer.observe(animation))
+// animations.forEach(animation => observer.observe(animation))
 
 sendBtn.addEventListener("click", (event) => {
     event.preventDefault();
