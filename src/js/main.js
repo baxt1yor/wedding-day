@@ -129,7 +129,7 @@ muteBtn.addEventListener('click', toggleMute)
 
 // animations.forEach(animation => observer.observe(animation))
 
-sendBtn.addEventListener("click", (event) => {
+sendBtn.addEventListener("click", async (event) => {
     event.preventDefault();
 
     if (guest.value === '') {
@@ -142,6 +142,25 @@ sendBtn.addEventListener("click", (event) => {
     if (guest.value !== '' && attendance.checked) {
         sendBtn.classList.add("active")
         document.getElementById("send-btn-text").innerText = "ОТПРАВЛЕНО"
+    }
+
+    try {
+        const response = await fetch('/.netlify/functions/sendMessage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: `
+                GuestName: ${guest.value}
+                Attendance: ${attendance.value}
+                `
+            }),
+        });
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error('Error:', error);
     }
 });
 

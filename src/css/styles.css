@@ -438,7 +438,7 @@ body{
 
 @keyframes ring {
     0% {
-        rotat: 6deg
+        rotate: 6deg
     }
 
     50% {
