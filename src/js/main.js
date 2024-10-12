@@ -9,7 +9,7 @@ const minute = document.getElementById("minute");
 const second = document.getElementById("second");
 const sendBtn = document.getElementById("send");
 const guest = document.querySelector("input[name=guest]");
-const attendance = document.querySelector("input[name=attendance]");
+const attendances = document.querySelectorAll("input[name=attendance]");
 const previousDate = new Date('2025-04-12T00:00:00');
 const guestValid = document.getElementById("guest-valid");
 
@@ -66,7 +66,6 @@ function handleScroll() {
         const translateY = parseFloat(matrixValues[5] ?? 0);
         const distanceToView = scrollPosition - (animations[i].getBoundingClientRect().top + window.scrollY);
         if (distanceToView > 0 && distanceToView < window.innerHeight) {
-            // console.log(animations[i].style.transform)
             const opacity = Math.min(1, distanceToView / window.innerHeight);
             const translate = translateX < 0 ? Math.min(0, translateX + distanceToView) : Math.max(0, translateX - distanceToView);
 
@@ -102,9 +101,31 @@ document.addEventListener("DOMContentLoaded", () => {
         requestAnimationFrame(handleScroll)
     });
 
+    document.addEventListener("visibilitychange", handleScroll)
+
     setTimeout(() => {
         document.getElementById('spinner').remove()
-    }, 1000)
+    }, 1000);
+
+    guest.addEventListener("change", () => {
+        if(guest.value !== '' && guestValid.style.display === '') {
+            guestValid.style.display = "none";
+        }
+    });
+
+    guest.addEventListener("keydown", () => {
+        if(guestValid.style.display === '') {
+            guestValid.style.display = "none";
+        }
+    });
+
+    attendances.forEach(attendance => {
+        attendance.addEventListener("change", () => {
+            if ((attendance.value !== null || String(attendance.value).trim() !== '') && attendanceValid.style.display === '') {
+                attendanceValid.style.display = "none";
+            }
+        });
+    });
 });
 
 
@@ -135,46 +156,32 @@ sendBtn.addEventListener("click", async (event) => {
     if (guest.value === '') {
         guestValid.style.display = "";
     }
+    const attendance = document.querySelector("input[name=attendance]:checked");
 
-    if (!attendance.checked){
+
+    if (attendance === null || attendance.value === '' || attendance.value === null) {
         attendanceValid.style.display = "";
     }
-    if (guest.value !== '' && attendance.checked) {
+
+    if (guest.value !== '' && attendance.value !== '') {
+
+        try {
+            const response = await fetch('/.netlify/functions/sendMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: `*GuestName*: ${guest.value} \n*Attendance*: ${attendance.value}`
+                }),
+            });
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+
         sendBtn.classList.add("active")
         document.getElementById("send-btn-text").innerText = "ОТПРАВЛЕНО"
-    }
-
-    try {
-        const response = await fetch('/.netlify/functions/sendMessage', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                message: `*GuestName*: ${guest.value} \n*Attendance*: ${attendance.value}`
-            }),
-        });
-        const data = await response.json();
-        console.log(data);
-    } catch (error) {
-        console.error('Error:', error);
-    }
-});
-
-guest.addEventListener("change", () => {
-    if(guestValid.style.display === '') {
-        guestValid.style.display = "none";
-    }
-});
-
-guest.addEventListener("keydown", () => {
-    if(guestValid.style.display === '') {
-        guestValid.style.display = "none";
-    }
-});
-
-attendance.addEventListener("change", () => {
-    if(attendanceValid.style.display === '') {
-        attendanceValid.style.display = "none";
     }
 });
